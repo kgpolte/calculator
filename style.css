@@ -79,8 +79,13 @@ body {
 
 button {
     border-radius: 8px;
+    border-style: ridge;
 }
 
 button:hover {
     box-shadow: 0px 0px 5px gray inset;
+}
+
+button:active {
+    box-shadow: 0px 0px 5px 2px #3c495e inset;
 }
