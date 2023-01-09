@@ -109,7 +109,7 @@ clearBtn.addEventListener('click', e => {
     previousNum = null;
     currentNum = null;
     currentOperator = null;
-    updateDisplay('0', '0');
+    updateDisplay('0', '=');
 });
 
 decimalBtn.addEventListener('click', e => {
