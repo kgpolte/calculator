@@ -37,6 +37,7 @@ const previousDisplay = document.getElementById('previous');
 const equalsBtn = document.getElementById('equals');
 const clearBtn = document.getElementById('clear');
 const decimalBtn = document.getElementById('decimal');
+const backspaceBtn = document.getElementById('backspace');
 
 let previousNum = null;
 let currentNum = null;
@@ -106,4 +107,12 @@ decimalBtn.addEventListener('click', e => {
         currentNum = 0;
     }
     currentDisplay.textContent = currentNum + '.';
+});
+
+backspaceBtn.addEventListener('click', e => {
+    if (!currentNum) return;
+    const oldNumString = String(currentNum)
+    currentNum = Number(oldNumString.slice(0, oldNumString.length - 1));
+    currentDisplay.textContent = currentNum;
+    if(currentNum === 0) currentNum = null;
 });
