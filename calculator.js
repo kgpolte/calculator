@@ -92,3 +92,11 @@ equalsBtn.addEventListener('click', e => {
     previousDisplay.textContent = '=';
     currentDisplay.textContent = currentNum;
 });
+
+clearBtn.addEventListener('click', e => {
+    previousNum = null;
+    currentNum = null;
+    currentOperator = null;
+    previousDisplay.textContent = '0';
+    currentDisplay.textContent = '0';
+});
