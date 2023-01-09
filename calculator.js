@@ -30,6 +30,19 @@ function operate(operator, a, b) {
 }
 
 
+function updateDisplay(currentVal, previousVal) {
+
+    currentDisplay.textContent = currentVal;
+    previousDisplay.textContent = previousVal;
+
+    if (String(currentVal).includes('.')) {
+        decimalBtn.disabled = true;
+    } else {
+        decimalBtn.disabled = false;
+    }
+}
+
+
 const numBtns = Array.from(document.querySelectorAll('.num-btn'));
 const operatorButtons = Array.from(document.querySelectorAll('.operator'));
 const currentDisplay = document.getElementById('current');
@@ -51,9 +64,9 @@ numBtns.forEach(button => {
         const num = e.target.textContent;
         const displayText = currentDisplay.textContent;
         if (currentNum == null) {
-            currentDisplay.textContent = num;
+            updateDisplay(num, previousDisplay.textContent);
         } else {
-            currentDisplay.textContent = displayText + num;
+            updateDisplay(displayText + num, previousDisplay.textContent);
         }
         currentNum = Number(currentDisplay.textContent);
     });
@@ -75,8 +88,7 @@ operatorButtons.forEach(button => {
 
         currentNum = null;
         currentOperator = e.target.textContent;
-        currentDisplay.textContent = '0';
-        previousDisplay.textContent = ` = ${previousNum} ${currentOperator}`;
+        updateDisplay('0', `= ${previousNum} ${currentOperator}`);
     });
 });
 
@@ -90,29 +102,34 @@ equalsBtn.addEventListener('click', e => {
     currentNum = operate(currentOperator, previousNum, currentNum);
     previousNum = null;
     currentOperator = null;
-    previousDisplay.textContent = '=';
-    currentDisplay.textContent = currentNum;
+    updateDisplay(currentNum, '=');
 });
 
 clearBtn.addEventListener('click', e => {
     previousNum = null;
     currentNum = null;
     currentOperator = null;
-    previousDisplay.textContent = '0';
-    currentDisplay.textContent = '0';
+    updateDisplay('0', '0');
 });
 
 decimalBtn.addEventListener('click', e => {
     if (!currentNum) {
         currentNum = 0;
     }
+    updateDisplay(currentNum + '.', previousDisplay.textContent);
     currentDisplay.textContent = currentNum + '.';
 });
 
 backspaceBtn.addEventListener('click', e => {
-    if (!currentNum) return;
-    const oldNumString = String(currentNum)
-    currentNum = Number(oldNumString.slice(0, oldNumString.length - 1));
-    currentDisplay.textContent = currentNum;
-    if(currentNum === 0) currentNum = null;
+    if (currentNum == null) return;
+
+    if (currentDisplay.textContent.length <= 1) {
+        currentNum = null;
+        updateDisplay('0', previousDisplay.textContent);
+    } else {
+        const newText = currentDisplay.textContent.slice(0,
+                        currentDisplay.textContent.length - 1);
+        currentNum = Number(newText);
+        updateDisplay(newText, previousDisplay.textContent);
+    }
 });
