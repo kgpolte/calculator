@@ -61,8 +61,6 @@ numBtns.forEach(button => {
 /* Event listeners for operator buttons */
 
 operatorButtons.forEach(button => {
-    console.log(button);
-
     button.addEventListener('click', e => {
         
         if (!currentNum) return;
@@ -76,7 +74,7 @@ operatorButtons.forEach(button => {
         currentNum = null;
         currentOperator = e.target.textContent;
         currentDisplay.textContent = '0';
-        previousDisplay.textContent = `${previousNum} ${currentOperator}`;
+        previousDisplay.textContent = ` = ${previousNum} ${currentOperator}`;
     });
 });
 
