@@ -36,6 +36,7 @@ const currentDisplay = document.getElementById('current');
 const previousDisplay = document.getElementById('previous');
 const equalsBtn = document.getElementById('equals');
 const clearBtn = document.getElementById('clear');
+const decimalBtn = document.getElementById('decimal');
 
 let previousNum = null;
 let currentNum = null;
@@ -53,7 +54,7 @@ numBtns.forEach(button => {
         } else {
             currentDisplay.textContent = displayText + num;
         }
-        currentNum = parseInt(currentDisplay.textContent);
+        currentNum = Number(currentDisplay.textContent);
     });
 });
 
@@ -98,4 +99,11 @@ clearBtn.addEventListener('click', e => {
     currentOperator = null;
     previousDisplay.textContent = '0';
     currentDisplay.textContent = '0';
+});
+
+decimalBtn.addEventListener('click', e => {
+    if (!currentNum) {
+        currentNum = 0;
+    }
+    currentDisplay.textContent = currentNum + '.';
 });
