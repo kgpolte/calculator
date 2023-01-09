@@ -23,9 +23,9 @@ function operate(operator, a, b) {
     } else if (operator == '-') {
         return subtract(a, b);
     } else if (operator == '*') {
-        return multiply(a, b);
+        return Math.round(multiply(a, b) * 1000000) / 1000000;
     } else if (operator == '/') {
-        return divide(a, b);
+        return Math.round(divide(a, b) * 1000000) / 1000000;
     }
 }
 
@@ -57,10 +57,13 @@ let currentNum = null;
 let currentOperator = null;
 
 
-/* Event listeners for number buttons */
+/* Event listeners */
 
 numBtns.forEach(button => {
     button.addEventListener('click', e => {
+
+        if (currentDisplay.textContent.length > 15) return;
+
         const num = e.target.textContent;
         const displayText = currentDisplay.textContent;
         if (currentNum == null) {
@@ -71,9 +74,6 @@ numBtns.forEach(button => {
         currentNum = Number(currentDisplay.textContent);
     });
 });
-
-
-/* Event listeners for operator buttons */
 
 operatorButtons.forEach(button => {
     button.addEventListener('click', e => {
@@ -91,9 +91,6 @@ operatorButtons.forEach(button => {
         updateDisplay('0', `= ${previousNum} ${currentOperator}`);
     });
 });
-
-
-/* Event listeners for unique buttons */
 
 equalsBtn.addEventListener('click', e => {
 
@@ -113,9 +110,13 @@ clearBtn.addEventListener('click', e => {
 });
 
 decimalBtn.addEventListener('click', e => {
+
+    if (currentDisplay.textContent.length > 15) return;
+
     if (!currentNum) {
         currentNum = 0;
     }
+
     updateDisplay(currentNum + '.', previousDisplay.textContent);
     currentDisplay.textContent = currentNum + '.';
 });
