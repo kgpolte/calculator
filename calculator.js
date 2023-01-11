@@ -1,3 +1,17 @@
+const numBtns = Array.from(document.querySelectorAll('.num-btn'));
+const operatorButtons = Array.from(document.querySelectorAll('.operator'));
+const currentDisplay = document.getElementById('current');
+const previousDisplay = document.getElementById('previous');
+const equalsBtn = document.getElementById('equals');
+const clearBtn = document.getElementById('clear');
+const decimalBtn = document.getElementById('decimal');
+const backspaceBtn = document.getElementById('backspace');
+
+let previousNum = null;
+let currentNum = null;
+let currentOperator = null;
+
+
 /* Operation Functions */
 
 function add(a, b) {
@@ -29,7 +43,6 @@ function operate(operator, a, b) {
     }
 }
 
-
 function updateDisplay(currentVal, previousVal) {
 
     currentDisplay.textContent = currentVal;
@@ -42,37 +55,28 @@ function updateDisplay(currentVal, previousVal) {
     }
 }
 
+function clickNumber(num) {
 
-const numBtns = Array.from(document.querySelectorAll('.num-btn'));
-const operatorButtons = Array.from(document.querySelectorAll('.operator'));
-const currentDisplay = document.getElementById('current');
-const previousDisplay = document.getElementById('previous');
-const equalsBtn = document.getElementById('equals');
-const clearBtn = document.getElementById('clear');
-const decimalBtn = document.getElementById('decimal');
-const backspaceBtn = document.getElementById('backspace');
+    if (currentDisplay.textContent.length > 15) return;
 
-let previousNum = null;
-let currentNum = null;
-let currentOperator = null;
+    const displayText = currentDisplay.textContent;
+
+    if (currentNum == null) {
+        updateDisplay(num, previousDisplay.textContent);
+    } else {
+        updateDisplay(displayText + num, previousDisplay.textContent);
+    }
+
+    currentNum = Number(currentDisplay.textContent);
+}
+
+
 
 
 /* Event listeners */
 
 numBtns.forEach(button => {
-    button.addEventListener('click', e => {
-
-        if (currentDisplay.textContent.length > 15) return;
-
-        const num = e.target.textContent;
-        const displayText = currentDisplay.textContent;
-        if (currentNum == null) {
-            updateDisplay(num, previousDisplay.textContent);
-        } else {
-            updateDisplay(displayText + num, previousDisplay.textContent);
-        }
-        currentNum = Number(currentDisplay.textContent);
-    });
+    button.addEventListener('click', e => clickNumber(e.target.textContent));
 });
 
 operatorButtons.forEach(button => {
@@ -132,5 +136,13 @@ backspaceBtn.addEventListener('click', e => {
                         currentDisplay.textContent.length - 1);
         currentNum = Number(newText);
         updateDisplay(newText, previousDisplay.textContent);
+    }
+});
+
+document.addEventListener('keydown', e => {
+    if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+        clickNumber(e.key);
+    } else if (e.key == '+') {
+
     }
 });
