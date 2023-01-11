@@ -55,6 +55,9 @@ function updateDisplay(currentVal, previousVal) {
     }
 }
 
+
+/* Functions that are called when various buttons are pressed */
+
 function clickNumber(num) {
 
     if (currentDisplay.textContent.length > 15) return;
@@ -70,33 +73,29 @@ function clickNumber(num) {
     currentNum = Number(currentDisplay.textContent);
 }
 
+function clickOperator(operator) {
 
+    if (!currentNum) return;
 
+    if (currentOperator) {
+        previousNum = operate(currentOperator, previousNum, currentNum);
+    } else {
+        previousNum = currentNum;
+    }
 
-/* Event listeners */
+    currentNum = null;
+    currentOperator = operator;
+    updateDisplay('0', `= ${previousNum} ${currentOperator}`);
+}
 
-numBtns.forEach(button => {
-    button.addEventListener('click', e => clickNumber(e.target.textContent));
-});
+function clickDecimal() {
+    if (currentDisplay.textContent.length > 15 || decimalBtn.disabled) return;
+    if (!currentNum) currentNum = 0;
+    updateDisplay(currentNum + '.', previousDisplay.textContent);
+    currentDisplay.textContent = currentNum + '.';
+}
 
-operatorButtons.forEach(button => {
-    button.addEventListener('click', e => {
-        
-        if (!currentNum) return;
-
-        if (currentOperator) {
-            previousNum = operate(currentOperator, previousNum, currentNum);
-        } else {
-            previousNum = currentNum;
-        }
-
-        currentNum = null;
-        currentOperator = e.target.textContent;
-        updateDisplay('0', `= ${previousNum} ${currentOperator}`);
-    });
-});
-
-equalsBtn.addEventListener('click', e => {
+function clickEquals() {
 
     if(!currentOperator) return;
 
@@ -104,28 +103,9 @@ equalsBtn.addEventListener('click', e => {
     previousNum = null;
     currentOperator = null;
     updateDisplay(currentNum, '=');
-});
+}
 
-clearBtn.addEventListener('click', e => {
-    previousNum = null;
-    currentNum = null;
-    currentOperator = null;
-    updateDisplay('0', '=');
-});
-
-decimalBtn.addEventListener('click', e => {
-
-    if (currentDisplay.textContent.length > 15) return;
-
-    if (!currentNum) {
-        currentNum = 0;
-    }
-
-    updateDisplay(currentNum + '.', previousDisplay.textContent);
-    currentDisplay.textContent = currentNum + '.';
-});
-
-backspaceBtn.addEventListener('click', e => {
+function clickBackspace() {
     if (currentNum == null) return;
 
     if (currentDisplay.textContent.length <= 1) {
@@ -137,12 +117,37 @@ backspaceBtn.addEventListener('click', e => {
         currentNum = Number(newText);
         updateDisplay(newText, previousDisplay.textContent);
     }
+}
+
+
+/* Event listeners */
+
+numBtns.forEach(btn => btn.addEventListener('click', e => clickNumber(e.target.textContent)));
+operatorButtons.forEach(btn => btn.addEventListener('click', e => clickOperator(e.target.textContent)));
+equalsBtn.addEventListener('click', e => clickEquals());
+backspaceBtn.addEventListener('click', e => clickBackspace());
+
+clearBtn.addEventListener('click', e => {
+    previousNum = null;
+    currentNum = null;
+    currentOperator = null;
+    updateDisplay('0', '=');
 });
+
+decimalBtn.addEventListener('click', e => clickDecimal());
 
 document.addEventListener('keydown', e => {
     if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
         clickNumber(e.key);
-    } else if (e.key == '+') {
-
+    } else if (e.key == '+' || e.key == '-' || e.key == '*' || e.key == '/') {
+        clickOperator(e.key);
+    } else if (e.key == '=' || e.key == 'Enter') {
+        clickEquals();
+    } else if (e.key == 'Backspace') {
+        clickBackspace();
+    } else if (e.key == '.') {
+        clickDecimal();
     }
+
+    console.log(e.key);
 });
