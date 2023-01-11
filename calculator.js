@@ -1,3 +1,8 @@
+/*
+KGPolte 2013
+A simple calculator app, made for The Odin Project
+*/
+
 const numBtns = Array.from(document.querySelectorAll('.num-btn'));
 const operatorButtons = Array.from(document.querySelectorAll('.operator'));
 const currentDisplay = document.getElementById('current');
@@ -40,18 +45,6 @@ function operate(operator, a, b) {
         return Math.round(multiply(a, b) * 1000000) / 1000000;
     } else if (operator == '/') {
         return Math.round(divide(a, b) * 1000000) / 1000000;
-    }
-}
-
-function updateDisplay(currentVal, previousVal) {
-
-    currentDisplay.textContent = currentVal;
-    previousDisplay.textContent = previousVal;
-
-    if (String(currentVal).includes('.')) {
-        decimalBtn.disabled = true;
-    } else {
-        decimalBtn.disabled = false;
     }
 }
 
@@ -119,13 +112,24 @@ function clickBackspace() {
     }
 }
 
+function updateDisplay(currentVal, previousVal) {
+
+    currentDisplay.textContent = currentVal;
+    previousDisplay.textContent = previousVal;
+
+    if (String(currentVal).includes('.')) {
+        decimalBtn.disabled = true;
+    } else {
+        decimalBtn.disabled = false;
+    }
+}
+
 
 /* Event listeners */
 
-numBtns.forEach(btn => btn.addEventListener('click', e => clickNumber(e.target.textContent)));
-operatorButtons.forEach(btn => btn.addEventListener('click', e => clickOperator(e.target.textContent)));
 equalsBtn.addEventListener('click', e => clickEquals());
 backspaceBtn.addEventListener('click', e => clickBackspace());
+decimalBtn.addEventListener('click', e => clickDecimal());
 
 clearBtn.addEventListener('click', e => {
     previousNum = null;
@@ -134,7 +138,13 @@ clearBtn.addEventListener('click', e => {
     updateDisplay('0', '=');
 });
 
-decimalBtn.addEventListener('click', e => clickDecimal());
+numBtns.forEach(btn => btn.addEventListener('click', e => {
+    clickNumber(e.target.textContent)
+}));
+
+operatorButtons.forEach(btn => btn.addEventListener('click', e => {
+    clickOperator(e.target.textContent)
+}));
 
 document.addEventListener('keydown', e => {
     if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
